@@ -25,5 +25,25 @@ int main()
      
     
      printf("\n\n");
-    
+   
+//########### começar zerando 1 elemento da 2 linha,depois o 2 e Repetir para a segunda coluna, a partir do item 3.########
+
+    for(j=0;j<=3;j++)   //começar pela 1 coluna e assim vai...
+    {
+        for(i=0;i<=3;i++)          
+        { 
+            if(i>j)
+            {  
+                 s=-m[i][j]/m[j][j];
+                 for(k=0;k<=n;k++)
+                 {
+                       m[i][k]=s*m[j][k]+m[i][k];
+                 }     
+            }
+
+        }
+        
+
+    } 
+
 }
