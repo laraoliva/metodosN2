@@ -13,10 +13,10 @@ int main()
      float b[3]={3,7,5},x[n],v[n];
  
 //############################################## Imprimir matriz ########################################################
-     printf("\n\n\t\tMATRIZ ESTENDIDA\n\n");
-     for(i=0;i<=2;i++)
+      printf("\n\n\t\tMATRIZ  DOS COEFICIENTES\n\n");
+     for(i=0;i<=n-1;i++)
      {
-        for(j=0;j<=3;j++)         
+        for(j=0;j<=n-1;j++)         
         {
                printf("\t%0.2f",m[i][j]);
                
