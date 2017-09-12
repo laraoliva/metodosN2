@@ -50,7 +50,42 @@ int main()
          printf("\n\t%0.2f\n",v[i]);
        
      }
+//######### Descobrir a maior razao para usar a linha como pivô e anular os outros coeficientes da mesma coluna ###########
+
+    for(k=0;k<=n-1;k++)
+    {  
+         
+         rmax=0;
+         for(i=k;i<=n-1;i++)
+         {
+              r=m[l[i]][k]/v[l[i]];
+
+              if(fabs(r)> fabs(rmax))
+              {
+                  rmax=r;
+                  j=i;
+              }
+         }
+
+         aux=l[j];    //trocar os indices do vetor l
+         l[j]=l[k];  
+         l[k]=aux;
+  
           
+ 
+         for(i=k+1;i<=n-1;i++) 
+         {
+             mult=m[l[i]][k]/m[l[k]][k];
+             for(a=k;a<=n-1;a++)
+             {
+                  m[l[i]][a] = m[l[i]][a]-mult*m[l[k]][a];    //zerar os elementos por coluna
+             }                
+             b[l[i]] = b[l[i]]-mult*b[l[k]];                 //modifica o vetor resposta
+         }        
+
+
+    }
+             
      
 //############################################ Matriz triangular###############################################
 
