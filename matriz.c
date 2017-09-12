@@ -89,12 +89,13 @@ int main()
      
 //############################################ Matriz triangular###############################################
 
-     printf("\n\n\t\tMATRIZ TRIANGULAR\n\n");
-     for(i=0;i<=2;i++)
+     
+     printf("\n\n\t\tMATRIZ TRIANGULAR\n\n"); //imprimir de acordo com o vetor l, pelo qual mudou-se as linhas
+     for(i=0;i<=n-1;i++)
      {
-        for(j=0;j<=2;j++)         
+        for(j=0;j<=n-1;j++)         
         {
-               printf("\t%0.2f",m[i][j]);
+               printf("\t%0.2f",m[l[i]][j]);
                
         }
         printf("\n");
