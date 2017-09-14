@@ -50,11 +50,10 @@ double **lermatriz()
 
 //############################funçao imprime############################
 
-void imprime(double **m)
+void imprimeEX(double **m)
 {
    int i,j;
    
-    printf("\n\n\t\tMATRIZ ESTENDIDA\n\n");
 
       for(i=0;i<dim;i++)
      {
@@ -71,7 +70,7 @@ void imprime(double **m)
 
 }
 //#################################funaço matrix triangular...####################
-void triangular(double **m)
+void imprime(double **m)
 {
    int i,j;
 
@@ -135,7 +134,7 @@ void resultados(double **m)
          x[i]=(m[i][dim]-s)/m[i][i];
     }
 
-    printf("\n\n\t\tRESULTADOS\n\n");
+    printf("\n\n\t\tRESULTADOS PELA ELIMINAÇAO DE GAUSS\n\n");
     for(i=0;i<dim;i++)
     {
          printf("\n\tx%d=%0.2f\n",i+1,x[i]);
@@ -143,28 +142,86 @@ void resultados(double **m)
     }
 } 
 
+//################################## calcular L e U #############################################
+
+double **calcmatrizU(double **m,double **U,double **L,int k)
+{
+    int j,s;
+    double soma;
+
+    for(j=k;j<=dim-1;j++)
+    {
+          soma=0;
+
+          for(s=0;s<=k;s++)
+          {
+               soma=soma+L[k][s]*U[s][j];
+          }
+
+          U[k][j] = m[k][j] -soma;
+    }
+    return U;
+}
+
+
+double **calcmatrizL(double **m,double **U,double **L,int k)
+{
+    int i,s;
+    double soma;
+
+    for(i=k+1;i<=dim-1;i++)
+    {
+       soma=0;
+       for(s=0;s<=k;s++)
+       {
+             soma=soma+L[i][s]*U[s][k];
+       }
+       L[i][k] = (m[i][k] - soma)/U[k][k];
+    } 
+    return L; 
+}
+
 int main(void)
 {
 //#############################inicializaçao da matriz###########################################
 
-    double **m;
-    int i;
+    double **m,**L,**U;
+    int i,k;
    
     m=malloc(dim*sizeof(double *));
+    L=malloc(dim*sizeof(double *));
+    U=malloc(dim*sizeof(double *));
 
     for (i=0;i<dim;i++)
     {    
           m[i]=malloc((dim+1)*sizeof(double));
+          L[i]=malloc((dim)*sizeof(double));
+          U[i]=malloc((dim)*sizeof(double));
           
     }
+
     m=lermatriz();
   
-    imprime(m);
-    
+    printf("\n\n\t\tMATRIZ ESTENDIDA\n\n");
+    imprimeEX(m);
+
+    for (k=0;k<dim;k++)
+    {    
+        L[k][k]=1;
+
+        U=calcmatrizU(m,U,L,k);   
+       
+        L=calcmatrizL(m,U,L,k);       
+    }
+
     zerar(m);
 
-    triangular(m);
+    imprime(m);
 
     resultados(m);
-     
+    
+    printf("\n\n\t\tMATRIZ U: \n\n");
+    imprime(U);
+    printf("\n\n\t\tMATRIZ L: \n\n");
+    imprime(L); 
 }
