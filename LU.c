@@ -10,11 +10,14 @@ double **lermatriz()
 {
    double **m,a;
    int i,j;
-   
+   char nome[100];
+
    FILE *leitura;
    
+   printf("\n\n\t\tDIGITE O NOME DO ARQUIVO QUE SERA USADO PARA LER OS VALORES DA MATRIZ:\n\n");
+   scanf("%s",nome);
 
-   leitura= fopen("lu.dat","r"); 
+   leitura= fopen(nome,"r"); 
    
 
     m=malloc(dim*sizeof(double *));
