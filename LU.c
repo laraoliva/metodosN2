@@ -5,10 +5,49 @@
 #define dim 4
 
 
+//##################################### ler matriz a partir de um arquivo ########################
+double **lermatriz()
+{
+   double **m,a;
+   int i,j;
+   
+   FILE *leitura;
+   
+
+   leitura= fopen("lu.dat","r"); 
+   
+
+    m=malloc(dim*sizeof(double *));
+    
+
+    for (i=0;i<dim;i++)
+    {   
+        
+          m[i]=malloc((dim+1)*sizeof(double));
+    }
+
+    i=j=0;
+
+    while (fscanf(leitura,"%lf",&a) !=EOF) 
+    {
+       
+       if(j==dim+1)
+       { 
+          
+          j=0;
+          i++;
+         
+       }
+       m[i][j]=a;
+       j++;
+
+    }
+    return m;
+}
 
 //############################funçao imprime############################
 
-void imprime(double m[][dim+1])
+void imprime(double **m)
 {
    int i,j;
    
@@ -29,7 +68,7 @@ void imprime(double m[][dim+1])
 
 }
 //#################################funaço matrix triangular...####################
-void triangular(double m[][dim+1])
+void triangular(double **m)
 {
    int i,j;
 
@@ -50,7 +89,7 @@ void triangular(double m[][dim+1])
 
 }
 //##################################### funçao zerar###############################
-void zerar(double  m[][dim+1])
+void zerar(double  **m)
 {
     int i,j,k;
     double s;   
@@ -77,7 +116,7 @@ void zerar(double  m[][dim+1])
 
 //#############################funçao para resolver o sistema...#############################
 
-void resultados(double m[][dim+1])
+void resultados(double **m)
 {
    double x[dim],s;
    int i,j;
@@ -105,15 +144,24 @@ int main(void)
 {
 //#############################inicializaçao da matriz###########################################
 
-     double m[4][5]={{1,1,0,3,4},{2,1,-1,1,1},{3,-1,-1,2,-3},{-1,2,3,-1,4}};
-     
-     
-     imprime(m);
+    double **m;
+    int i;
+   
+    m=malloc(dim*sizeof(double *));
+
+    for (i=0;i<dim;i++)
+    {    
+          m[i]=malloc((dim+1)*sizeof(double));
+          
+    }
+    m=lermatriz();
+  
+    imprime(m);
     
-     zerar(m);
+    zerar(m);
 
-     triangular(m);
+    triangular(m);
 
-     resultados(m);
+    resultados(m);
      
 }
