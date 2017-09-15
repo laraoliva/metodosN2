@@ -69,12 +69,11 @@ void imprimeEX(double **m)
      printf("\n\n");
 
 }
-//#################################funaço matrix triangular...####################
+//#################################funçao matrix triangular...####################
 void imprime(double **m)
 {
    int i,j;
 
-   printf("\n\n\t\tMATRIZ TRIANGULAR\n\n");
 
    for(i=0;i<dim;i++)
    {
@@ -169,7 +168,7 @@ double **calcmatrizL(double **m,double **U,double **L,int k)
     int i,s;
     double soma;
 
-    for(i=k+1;i<=dim-1;i++)
+    for(i=k+1;i<dim;i++)
     {
        soma=0;
        for(s=0;s<=k;s++)
@@ -181,16 +180,68 @@ double **calcmatrizL(double **m,double **U,double **L,int k)
     return L; 
 }
 
+//###################### funçao para resolver Lz=b (triangular inferior)########################
+
+double *triangIN(double *b,double **L)
+{
+   int i,j;
+   double *z,soma;
+   
+   z=malloc(dim*sizeof(double *));
+
+   z[0]=b[0];
+   
+   for(i=1;i<dim;i++)
+   {
+       soma=0;
+       for(j=0;j<=i;j++)
+      {
+         soma = soma + L[i][j]*z[j];
+      }
+      z[i] = b[i]-soma;
+   }
+   return z;
+}
+
+//###################### funçao para resolver Ux=z (triangular superior)#######################
+
+double *triangSUP(double **U, double *z)
+{
+   int i,j;
+   double *x,soma;
+
+   x=malloc(dim*sizeof(double *));
+
+   x[dim-1] = z[dim-1]/U[dim-1][dim-1];
+   
+   for(i=dim-2;i>=0;i--)
+   {
+      soma=0;
+
+      for(j=i+1;j<dim;j++)
+      {
+          soma = soma + U[i][j]*x[j];
+      }
+     x[i] = (z[i]-soma)/U[i][i];
+   }
+   return x;
+}
+
+
+
 int main(void)
 {
 //#############################inicializaçao da matriz###########################################
 
-    double **m,**L,**U;
+    double **m,**L,**U,*x,*z,*b;
     int i,k;
    
     m=malloc(dim*sizeof(double *));
     L=malloc(dim*sizeof(double *));
     U=malloc(dim*sizeof(double *));
+    x=malloc(dim*sizeof(double *));
+    z=malloc(dim*sizeof(double *));
+    b=malloc(dim*sizeof(double *));
 
     for (i=0;i<dim;i++)
     {    
@@ -201,6 +252,14 @@ int main(void)
     }
 
     m=lermatriz();
+
+    for(i=0;i<dim;i++)
+    {
+                             //vetor b de resposta para usar na funçao
+       b[i]=m[i][dim];
+       printf("%lf\n",b[i]);
+
+    }
   
     printf("\n\n\t\tMATRIZ ESTENDIDA\n\n");
     imprimeEX(m);
@@ -216,6 +275,7 @@ int main(void)
 
     zerar(m);
 
+    printf("\n\n\t\tMATRIZ TRIANGULAR\n\n");
     imprime(m);
 
     resultados(m);
@@ -224,4 +284,15 @@ int main(void)
     imprime(U);
     printf("\n\n\t\tMATRIZ L: \n\n");
     imprime(L); 
+
+    z=triangIN(b,L);
+    x=triangSUP(U,z);
+    
+    printf("\n\n\t\tRESULTADOS PELO METODO LU:\n\n");
+    for(i=0;i<dim;i++)
+    {
+         printf("\n\tx%d=%0.2f\n",i+1,x[i]);
+ 
+    }
+
 }
