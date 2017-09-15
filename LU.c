@@ -2,26 +2,23 @@
 
 #include<stdio.h>
 #include<stdlib.h>
-#define dim 4
 
 
 //##################################### ler matriz a partir de um arquivo ########################
-double **lermatriz()
+double **lermatriz(int dim)
 {
    double **m,a;
    int i,j;
    char nome[100];
 
-   FILE *leitura;
-   
-   printf("\n\n\t\tDIGITE O NOME DO ARQUIVO QUE SERA USADO PARA LER OS VALORES DA MATRIZ:\n\n");
-   scanf("%s",nome);
+    FILE *leitura; 
 
-   leitura= fopen(nome,"r"); 
-   
+    printf("\n\n\t\tDIGITE O NOME DO ARQUIVO QUE SERA USADO PARA LER OS VALORES DA MATRIZ:");
+    scanf("%s",nome);
 
     m=malloc(dim*sizeof(double *));
-    
+   
+    leitura= fopen(nome,"r");
 
     for (i=0;i<dim;i++)
     {   
@@ -50,7 +47,7 @@ double **lermatriz()
 
 //############################funçao imprime############################
 
-void imprimeEX(double **m)
+void imprimeEX(double **m, int dim)
 {
    int i,j;
    
@@ -70,7 +67,7 @@ void imprimeEX(double **m)
 
 }
 //#################################funçao matrix triangular...####################
-void imprime(double **m)
+void imprime(double **m,int dim)
 {
    int i,j;
 
@@ -90,7 +87,7 @@ void imprime(double **m)
 
 }
 //##################################### funçao zerar###############################
-void zerar(double  **m)
+void zerar(double  **m, int dim)
 {
     int i,j,k;
     double s;   
@@ -117,7 +114,7 @@ void zerar(double  **m)
 
 //#############################funçao para resolver o sistema...#############################
 
-void resultados(double **m)
+void resultados(double **m, int dim)
 {
    double x[dim],s;
    int i,j;
@@ -143,7 +140,7 @@ void resultados(double **m)
 
 //################################## calcular L e U #############################################
 
-double **calcmatrizU(double **m,double **U,double **L,int k)
+double **calcmatrizU(double **m,double **U,double **L,int k, int dim)
 {
     int j,s;
     double soma;
@@ -163,7 +160,7 @@ double **calcmatrizU(double **m,double **U,double **L,int k)
 }
 
 
-double **calcmatrizL(double **m,double **U,double **L,int k)
+double **calcmatrizL(double **m,double **U,double **L,int k,int dim)
 {
     int i,s;
     double soma;
@@ -182,7 +179,7 @@ double **calcmatrizL(double **m,double **U,double **L,int k)
 
 //###################### funçao para resolver Lz=b (triangular inferior)########################
 
-double *triangIN(double *b,double **L)
+double *triangIN(double *b,double **L, int dim)
 {
    int i,j;
    double *z,soma;
@@ -205,7 +202,7 @@ double *triangIN(double *b,double **L)
 
 //###################### funçao para resolver Ux=z (triangular superior)#######################
 
-double *triangSUP(double **U, double *z)
+double *triangSUP(double **U, double *z, int dim)
 {
    int i,j;
    double *x,soma;
@@ -234,7 +231,10 @@ int main(void)
 //#############################inicializaçao da matriz###########################################
 
     double **m,**L,**U,*x,*z,*b;
-    int i,k;
+    int i,k,dim;
+
+    printf("\n\n\t\tDIGITE O NUMERO DA MATRIZ QUADRADA:"); 
+    scanf("%d",&dim);
    
     m=malloc(dim*sizeof(double *));
     L=malloc(dim*sizeof(double *));
@@ -243,6 +243,7 @@ int main(void)
     z=malloc(dim*sizeof(double *));
     b=malloc(dim*sizeof(double *));
 
+  
     for (i=0;i<dim;i++)
     {    
           m[i]=malloc((dim+1)*sizeof(double));
@@ -251,7 +252,7 @@ int main(void)
           
     }
 
-    m=lermatriz();
+    m=lermatriz(dim);
 
     for(i=0;i<dim;i++)
     {
@@ -262,31 +263,31 @@ int main(void)
     }
   
     printf("\n\n\t\tMATRIZ ESTENDIDA\n\n");
-    imprimeEX(m);
+    imprimeEX(m,dim);
 
     for (k=0;k<dim;k++)
     {    
         L[k][k]=1;
 
-        U=calcmatrizU(m,U,L,k);   
+        U=calcmatrizU(m,U,L,k,dim);   
        
-        L=calcmatrizL(m,U,L,k);       
+        L=calcmatrizL(m,U,L,k,dim);       
     }
 
-    zerar(m);
+    zerar(m,dim);
 
     printf("\n\n\t\tMATRIZ TRIANGULAR\n\n");
-    imprime(m);
+    imprime(m,dim);
 
-    resultados(m);
+    resultados(m,dim);
     
     printf("\n\n\t\tMATRIZ U: \n\n");
-    imprime(U);
+    imprime(U,dim);
     printf("\n\n\t\tMATRIZ L: \n\n");
-    imprime(L); 
+    imprime(L,dim); 
 
-    z=triangIN(b,L);
-    x=triangSUP(U,z);
+    z=triangIN(b,L,dim);
+    x=triangSUP(U,z,dim);
     
     printf("\n\n\t\tRESULTADOS PELO METODO LU:\n\n");
     for(i=0;i<dim;i++)
